@@ -1,4 +1,4 @@
-# Fashion Insta
+# Insight Engine
 
 Ce dépôt est en cours de préparation.
 
@@ -16,8 +16,8 @@ Il part d'un ancien projet local contenant des supports de cadrage, un backlog e
 
 Les clés SSH, fichiers `.pem`, fichiers `.env` et autres secrets locaux ne doivent jamais être versionnés.
 
-La clé `EC2-NEW-3.pem` a été sortie du dossier projet et placée hors dépôt, dans un dossier local dédié aux secrets.
+La clé SSH locale détectée au départ a été sortie du dossier projet et placée hors dépôt, dans un dossier local dédié aux secrets.
 
 ## Prochaine étape
 
-Définir le nom final du dépôt, le positionnement du projet et la première direction technique avant d'ajouter le notebook et le code Python.
+Définir le positionnement du projet et la première direction technique avant d'ajouter le notebook et le code Python.

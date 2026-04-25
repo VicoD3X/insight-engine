@@ -15,4 +15,4 @@ data/
 `-- README.md
 ```
 
-Seul ce fichier de documentation est destiné à être suivi par Git pour l'instant.
+Seul ce fichier de documentation est destiné à être suivi par Git à ce stade.
