@@ -1,18 +1,34 @@
 # Données
 
-Ce dossier est réservé aux données locales du projet.
+Ce dossier contient les données dérivées utilisées par le projet Insight Engine.
 
-Les données brutes, intermédiaires et générées ne sont pas versionnées afin de garder le dépôt léger et d'éviter de publier des fichiers sensibles ou volumineux.
+## Données versionnées
 
-Structure prévue :
+Le dossier `data/processed/` contient les exports propres générés depuis les documents Office sources :
 
-```text
-data/
-|-- raw/
-|-- interim/
-|-- processed/
-|-- external/
-`-- README.md
+- `backlog.csv`
+- `financial_summary.csv`
+- `roi_scenarios.csv`
+- `risks.csv`
+- `rgpd_summary.csv`
+- `dashboard_data.json`
+
+Ces fichiers sont versionnés car ils alimentent le notebook, les tests et le dashboard React.
+
+## Données non versionnées
+
+Les données brutes ou temporaires ne sont pas ajoutées au dépôt afin de garder le projet léger et d'éviter de publier des fichiers sensibles ou volumineux.
+
+## Génération
+
+Depuis la racine du dépôt :
+
+```bash
+python scripts/build_processed_data.py
 ```
 
-Le dossier `processed/` contient les exports propres générés depuis les documents source. Ces fichiers sont versionnés car ils servent de base au notebook et au futur dashboard React local.
+Pour générer les exports et synchroniser le dashboard en une seule commande :
+
+```bash
+python scripts/run_project_pipeline.py
+```

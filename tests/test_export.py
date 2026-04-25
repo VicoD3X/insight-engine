@@ -22,6 +22,7 @@ def test_export_all_generates_dashboard_json(tmp_path):
 
     assert DASHBOARD_JSON_OUTPUT.exists()
     assert outputs["dashboard_data"] == DASHBOARD_JSON_OUTPUT
+    assert all(path.exists() for path in outputs.values())
 
     data = json.loads(DASHBOARD_JSON_OUTPUT.read_text(encoding="utf-8"))
     assert len(data["backlog"]) == 17

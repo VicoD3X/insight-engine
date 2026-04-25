@@ -1,26 +1,26 @@
 # Insight Engine — Fashion-Insta MVP Analytics
 
-Insight Engine transforme les documents de cadrage du MVP Fashion-Insta en une base data exploitable.
+Insight Engine transforme un cadrage produit IA en base analytique exploitable : données structurées, indicateurs de pilotage, synthèses décisionnelles et dashboard React local.
 
-Le projet part d'un livrable métier existant : une application mobile de recommandation d'articles de mode à partir d'une photo. Cette phase ne construit pas l'application mobile, ne crée pas de modèle IA et ne livre pas encore de dashboard. Elle structure les informations clés du cadrage produit pour préparer une analyse claire, testable et réutilisable.
+Le projet part du concept Fashion-Insta, une application mobile de recommandation d'articles de mode à partir d'une photo. Le dépôt ne livre pas l'application mobile finale et ne prétend pas embarquer une IA de recommandation en production. Il se concentre sur l'analyse, le pilotage MVP, le ROI, les risques et le RGPD.
 
-## Contexte
+## Présentation du projet
 
-Fashion-Insta est un MVP de parcours photo → recommandations → fiche produit. Les documents source décrivent le backlog, les hypothèses de budget, les scénarios ROI, les risques et les éléments RGPD.
+Les documents Office présents dans `docs/` sont la source métier du projet. Le pipeline Python extrait et structure les informations clés, puis génère des fichiers propres dans `data/processed/`.
 
-Dans ce dépôt, ces fichiers Office ne sont pas de simples annexes : ils sont la source métier du projet.
+Ces fichiers alimentent ensuite un notebook analytique et un dashboard React sans backend.
 
-## Objectif de la phase 1
+## Objectif métier
 
-Cette phase convertit les documents existants en datasets propres :
+L'objectif est de rendre un cadrage MVP compréhensible et actionnable :
 
-- extraction Python des informations clés ;
-- génération de CSV et d'un JSON exploitable par un futur dashboard ;
-- notebook analytique lisible ;
-- synthèses Markdown pour comprendre le projet sans ouvrir Excel ou PowerPoint ;
-- tests simples sur les calculs principaux.
+- prioriser le backlog avec une lecture MoSCoW ;
+- consolider les hypothèses budget et ROI ;
+- suivre les risques principaux ;
+- résumer les éléments RGPD ;
+- visualiser une trajectoire MVP en 4 sprints.
 
-## Sources métier
+## Sources du projet
 
 ```text
 docs/insight-engine-backlog.xlsx
@@ -28,9 +28,9 @@ docs/insight-engine-workbook.xlsx
 docs/insight-engine-presentation.pptx
 ```
 
-Les fichiers Office originaux sont conservés. Les données propres générées sont placées dans `data/processed/`.
+Les fichiers Office originaux sont conservés. Les exports dérivés sont versionnés car ils servent de base au dashboard et aux tests.
 
-## Structure du dépôt
+## Architecture du dépôt
 
 ```text
 insight-engine/
@@ -38,18 +38,22 @@ insight-engine/
 |   |-- processed/
 |   `-- README.md
 |-- dashboard/
-|   `-- application React locale
+|   |-- public/dashboard_data.json
+|   `-- src/
 |-- docs/
 |   |-- project-brief.md
 |   |-- backlog-summary.md
 |   |-- financial-assumptions.md
 |   |-- risk-register.md
 |   |-- rgpd-summary.md
+|   |-- dashboard-spec.md
 |   `-- extraction-notes.md
 |-- notebooks/
 |   `-- 01_insight_engine_analysis.ipynb
 |-- scripts/
-|   `-- build_processed_data.py
+|   |-- build_processed_data.py
+|   |-- run_project_pipeline.py
+|   `-- sync_dashboard_data.py
 |-- src/
 |   `-- insight_engine/
 |-- tests/
@@ -57,71 +61,93 @@ insight-engine/
 `-- requirements-dev.txt
 ```
 
-## Installation
+## Pipeline analytique Python
 
-Créer un environnement Python puis installer les dépendances :
+Le package `src/insight_engine/` contient les modules d'extraction, structuration, calcul, export et validation :
+
+- `backlog.py` : user stories, priorités MoSCoW et effort ;
+- `finance.py` : budget, ROI, point mort et bénéfice net mensuel ;
+- `risks.py` : registre des risques et criticité ;
+- `rgpd.py` : synthèse CNIL/RGPD ;
+- `export.py` : génération CSV et JSON ;
+- `validation.py` : contrôle minimal du JSON dashboard et des exports.
+
+## Notebook analytique
+
+Le notebook `notebooks/01_insight_engine_analysis.ipynb` présente le contexte, charge les sources Office, affiche les tables propres et synthétise les KPI, le backlog, le ROI, les risques et le RGPD.
+
+## Dashboard React local
+
+Le dossier `dashboard/` contient une interface React + Vite alimentée par `dashboard/public/dashboard_data.json`.
+
+Le dashboard affiche :
+
+- les KPI principaux ;
+- le backlog MVP ;
+- les scénarios ROI ;
+- la matrice de risques ;
+- la synthèse RGPD ;
+- la timeline des 4 sprints.
+
+Il ne contient pas de backend : toutes les données viennent du JSON généré par le pipeline Python.
+
+Démo publique GitHub Pages :
+
+```text
+https://vicod3x.github.io/insight-engine/
+```
+
+## Données générées
+
+```text
+data/processed/backlog.csv
+data/processed/financial_summary.csv
+data/processed/roi_scenarios.csv
+data/processed/risks.csv
+data/processed/rgpd_summary.csv
+data/processed/dashboard_data.json
+```
+
+## Installation
 
 ```bash
 python -m venv .venv
 pip install -r requirements.txt -r requirements-dev.txt
 ```
 
-## Générer les données traitées
+## Commandes principales
 
-Depuis la racine du dépôt :
+Générer les données traitées :
 
 ```bash
 python scripts/build_processed_data.py
 ```
 
-Cette commande génère :
-
-- `data/processed/backlog.csv`
-- `data/processed/financial_summary.csv`
-- `data/processed/roi_scenarios.csv`
-- `data/processed/risks.csv`
-- `data/processed/rgpd_summary.csv`
-- `data/processed/dashboard_data.json`
-
-Le fichier `dashboard_data.json` servira de source au dashboard React local prévu en phase 2.
-
-## Notebook analytique
-
-Lancer JupyterLab :
+Lancer l'orchestration complète du pipeline local :
 
 ```bash
-jupyter lab
+python scripts/run_project_pipeline.py
 ```
 
-Puis ouvrir :
-
-```text
-notebooks/01_insight_engine_analysis.ipynb
-```
-
-Le notebook charge les documents source, affiche les feuilles Excel détectées, reconstruit les tables propres et exporte les fichiers traités.
-
-## Tests
-
-```bash
-pytest
-```
-
-Les tests vérifient les calculs financiers, la criticité des risques, la structure du backlog et le schéma minimal du JSON dashboard.
-
-## Dashboard local
-
-Le dossier `dashboard/` contient une interface React locale alimentée par le fichier statique `data/processed/dashboard_data.json`.
-
-Il n'y a pas de backend : le dashboard lit une copie synchronisée du JSON dans `dashboard/public/dashboard_data.json`.
-
-Synchroniser les données depuis la racine du dépôt :
+Synchroniser les données du dashboard :
 
 ```bash
 python scripts/sync_dashboard_data.py
 ```
 
-Lancer l'interface :
+Lancer le notebook :
+
+```bash
+jupyter lab
+```
+
+Lancer les tests Python :
+
+```bash
+pytest
+```
+
+Lancer le dashboard :
 
 ```bash
 cd dashboard
@@ -129,33 +155,28 @@ npm install
 npm run dev
 ```
 
-Le dashboard affiche les KPI MVP, le backlog, les scénarios ROI, les risques, la synthèse RGPD et la timeline des sprints.
+## Tests
 
-## Déploiement GitHub Pages
-
-Le dashboard peut être publié comme vitrine statique via GitHub Pages :
-
-```text
-https://vicod3x.github.io/insight-engine/
-```
-
-Le workflow `.github/workflows/deploy-dashboard.yml` construit l'application Vite depuis `dashboard/` puis publie le contenu de `dashboard/dist`.
-
-La configuration Vite utilise `/` en développement local et `/insight-engine/` au moment du build pour que les assets et `dashboard_data.json` soient correctement résolus sur GitHub Pages.
-
-La phase 3 n'est pas encore démarrée : les tests avancés et validations supplémentaires seront traités ensuite.
+Les tests vérifient les calculs principaux, la structure du backlog, la criticité des risques, la génération des exports, la présence des fichiers essentiels et la validité minimale de `dashboard_data.json`.
 
 ## Limites actuelles
 
-Ce dépôt ne contient pas :
+- Le projet ne contient pas de vraie IA de recommandation en production.
+- Le dashboard est une interface statique locale, sans backend.
+- Les données viennent des documents de cadrage, pas d'un système métier connecté.
+- Les scénarios ROI sont des hypothèses de pilotage, pas des prévisions garanties.
+- Le dépôt reste volontairement au niveau MVP analytique portfolio.
 
-- d'API ou backend ;
-- de modèle IA de recommandation ;
-- de pipeline de production ;
-- de données brutes utilisateur.
+## Améliorations possibles
 
-Le bon positionnement est celui d'un MVP analytique : transformer un cadrage produit en base data propre pour aider à décider, prioriser et préparer la phase dashboard.
+- Ajouter un schéma JSON plus strict pour le dashboard.
+- Ajouter des graphiques interactifs si les données s'enrichissent.
+- Brancher un export PDF ou HTML des synthèses.
+- Ajouter une comparaison de scénarios plus détaillée.
+- Enrichir le notebook avec des visualisations complémentaires.
 
-## Prochaine phase
+## Contexte du projet
 
-La phase suivante consistera à créer un dashboard React local alimenté uniquement par `data/processed/dashboard_data.json`.
+Ce projet a été initialement développé dans le cadre d'un parcours professionnalisant en Data Science, puis restructuré pour servir de dépôt portfolio.
+
+Il montre la capacité à transformer un cadrage produit IA en pipeline analytique, indicateurs de pilotage, synthèses de décision et dashboard local.

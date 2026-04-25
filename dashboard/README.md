@@ -2,7 +2,7 @@
 
 Ce dossier contient le dashboard React local du projet Insight Engine.
 
-Il visualise les données structurées générées en phase 1 depuis les documents de cadrage Fashion-Insta. Le dashboard ne contient pas de backend : il lit uniquement le fichier statique `dashboard/public/dashboard_data.json`.
+Il visualise les données structurées générées depuis les documents de cadrage Fashion-Insta. Le dashboard ne contient pas de backend : il lit uniquement le fichier statique `dashboard/public/dashboard_data.json`.
 
 ## Source de données
 
@@ -41,7 +41,7 @@ npm run build
 
 ## Déploiement GitHub Pages
 
-Le dashboard est prévu pour être publié sur GitHub Pages à l'adresse :
+Le dashboard est publié sur GitHub Pages à l'adresse :
 
 ```text
 https://vicod3x.github.io/insight-engine/
