@@ -72,7 +72,7 @@ function App() {
             IE
           </div>
           <div>
-            <p className="eyebrow">Phase 2 · Local</p>
+            <p className="eyebrow">Portfolio · Live</p>
             <h1>Insight Engine</h1>
             <p className="brand-copy">
               Pilotage MVP Fashion-Insta, construit depuis les exports de cadrage.
