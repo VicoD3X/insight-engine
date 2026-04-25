@@ -1,10 +1,10 @@
 import { EMPTY_DATA_MESSAGE, formatNumber } from "../data.js";
 
-function RiskMatrix({ risks = [] }) {
+function RiskMatrix({ risks = [], onInspect }) {
   if (!risks.length) {
     return (
-      <section className="panel">
-        <h2>Risques</h2>
+      <section className="panel panel-risks">
+        <h3>Risques</h3>
         <p className="empty-inline">{EMPTY_DATA_MESSAGE}</p>
       </section>
     );
@@ -13,42 +13,66 @@ function RiskMatrix({ risks = [] }) {
   const maxCriticality = Math.max(...risks.map((risk) => risk.criticality || 0), 1);
 
   return (
-    <section className="panel full-width">
-      <div className="section-heading">
+    <section className="panel panel-risks">
+      <div className="panel-heading">
         <div>
           <p className="eyebrow">Risques</p>
-          <h2>Matrice de criticité MVP</h2>
+          <h3>Criticité</h3>
         </div>
-        <span className="metric-chip">Impact × probabilité</span>
+        <button
+          className="panel-action"
+          type="button"
+          onClick={() =>
+            onInspect({
+              eyebrow: "Risques",
+              title: "Registre des risques MVP",
+              summary:
+                "La criticité est calculée par probabilité × impact. Les risques restent volontairement au niveau cadrage MVP.",
+              items: risks.map((risk) => ({
+                title: risk.risk,
+                value: formatNumber(risk.criticality),
+                text: `${risk.mitigation} Suivi : ${risk.follow_up}`,
+              })),
+            })
+          }
+        >
+          Registre
+        </button>
       </div>
 
-      <div className="risk-grid">
-        {risks.map((risk) => (
-          <article className="risk-card" key={risk.risk}>
-            <div className="risk-header">
-              <strong>{risk.risk}</strong>
-              <span>{formatNumber(risk.criticality)}</span>
-            </div>
-            <div className="bar-track risk-track" aria-hidden="true">
-              <span style={{ width: `${((risk.criticality || 0) / maxCriticality) * 100}%` }} />
-            </div>
-            <dl>
-              <div>
-                <dt>Impact</dt>
-                <dd>{formatNumber(risk.impact)}</dd>
-              </div>
-              <div>
-                <dt>Probabilité</dt>
-                <dd>{formatNumber(risk.probability)}</dd>
-              </div>
-              <div>
-                <dt>Responsable</dt>
-                <dd>{risk.owner || EMPTY_DATA_MESSAGE}</dd>
-              </div>
-            </dl>
-            <p>{risk.mitigation || EMPTY_DATA_MESSAGE}</p>
-            <small>Suivi : {risk.follow_up || EMPTY_DATA_MESSAGE}</small>
-          </article>
+      <div className="risk-orbit" aria-label="Matrice de risque compacte">
+        {risks.map((risk, index) => (
+          <button
+            className="risk-node"
+            key={risk.risk}
+            style={{
+              "--score": (risk.criticality || 0) / maxCriticality,
+              "--delay": `${index * 65}ms`,
+            }}
+            type="button"
+            onClick={() =>
+              onInspect({
+                eyebrow: "Risque",
+                title: risk.risk,
+                summary: risk.mitigation || EMPTY_DATA_MESSAGE,
+                metrics: [
+                  ["Impact", formatNumber(risk.impact)],
+                  ["Probabilité", formatNumber(risk.probability)],
+                  ["Criticité", formatNumber(risk.criticality)],
+                  ["Responsable", risk.owner || "n/a"],
+                ],
+                items: [
+                  {
+                    title: "Suivi",
+                    text: risk.follow_up || EMPTY_DATA_MESSAGE,
+                  },
+                ],
+              })
+            }
+          >
+            <span>{formatNumber(risk.criticality)}</span>
+            <strong>{risk.risk}</strong>
+          </button>
         ))}
       </div>
     </section>

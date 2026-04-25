@@ -6,47 +6,49 @@ import {
   formatNumber,
 } from "../data.js";
 
-function KpiCards({ data }) {
+function KpiCards({ data, onInspect }) {
   const kpis = data?.kpis || {};
   const optimistic = findScenario(data?.roiScenarios || [], "optimiste");
   const pessimistic = findScenario(data?.roiScenarios || [], "pessimiste");
 
   const cards = [
     {
-      label: "Investissement initial",
+      label: "Investissement",
       value: formatCurrency(kpis.investment_initial),
-      hint: "Budget one-shot MVP",
+      hint: "Budget initial",
+      detail: "Investissement initial du MVP, issu du cadrage financier phase 1.",
     },
     {
       label: "Coût mensuel",
       value: formatCurrency(kpis.recurring_monthly_cost),
-      hint: "Cloud + maintenance",
+      hint: "Run cloud + maintenance",
+      detail: "Coût récurrent mensuel consolidé : cloud, maintenance et exploitation.",
     },
     {
-      label: "Effort MVP",
-      value: formatNumber(kpis.mvp_effort_days, " JH"),
-      hint: "Avant marge",
-    },
-    {
-      label: "Effort avec marge",
+      label: "Effort total",
       value: formatNumber(kpis.effort_with_buffer_days, " JH"),
-      hint: "Buffer inclus",
+      hint: `${formatNumber(kpis.mvp_effort_days, " JH")} avant marge`,
+      detail: "Effort MVP avec buffer de cadrage, sans refonte produit ni industrialisation lourde.",
     },
     {
-      label: "Point mort optimiste",
+      label: "Point mort",
       value: formatMonths(kpis.break_even_optimistic_months),
-      hint: "Si adoption + uplift au rendez-vous",
+      hint: "Scénario optimiste",
+      detail: "Délai théorique de retour sur investissement dans le scénario optimiste.",
+      tone: "focus",
     },
     {
-      label: "Net mensuel optimiste",
+      label: "Net optimiste",
       value: formatCurrency(optimistic?.monthly_net_benefit),
-      hint: "Après coûts récurrents",
+      hint: "Bénéfice mensuel",
+      detail: "Bénéfice net mensuel lu depuis le scénario ROI optimiste.",
       tone: "positive",
     },
     {
-      label: "Net mensuel pessimiste",
+      label: "Net pessimiste",
       value: formatCurrency(pessimistic?.monthly_net_benefit),
-      hint: "Après coûts récurrents",
+      hint: "Bénéfice mensuel",
+      detail: "Bénéfice net mensuel lu depuis le scénario ROI pessimiste.",
       tone: "negative",
     },
   ];
@@ -58,11 +60,26 @@ function KpiCards({ data }) {
   return (
     <section className="kpi-grid" aria-label="KPI principaux">
       {cards.map((card) => (
-        <article className={`kpi-card ${card.tone || ""}`} key={card.label}>
+        <button
+          className={`kpi-card ${card.tone || ""}`}
+          key={card.label}
+          type="button"
+          onClick={() =>
+            onInspect({
+              eyebrow: "KPI",
+              title: card.label,
+              summary: card.detail,
+              metrics: [
+                ["Valeur", card.value],
+                ["Lecture", card.hint],
+              ],
+            })
+          }
+        >
           <span>{card.label}</span>
           <strong>{card.value}</strong>
           <small>{card.hint}</small>
-        </article>
+        </button>
       ))}
     </section>
   );

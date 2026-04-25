@@ -1,10 +1,10 @@
 import { EMPTY_DATA_MESSAGE, formatCurrency, formatMonths, formatPercent } from "../data.js";
 
-function RoiScenarios({ scenarios = [] }) {
+function RoiScenarios({ scenarios = [], onInspect }) {
   if (!scenarios.length) {
     return (
-      <section className="panel">
-        <h2>Scénarios ROI</h2>
+      <section className="panel panel-roi">
+        <h3>Scénarios ROI</h3>
         <p className="empty-inline">{EMPTY_DATA_MESSAGE}</p>
       </section>
     );
@@ -16,12 +16,33 @@ function RoiScenarios({ scenarios = [] }) {
   );
 
   return (
-    <section className="panel">
-      <div className="section-heading">
+    <section className="panel panel-roi">
+      <div className="panel-heading">
         <div>
           <p className="eyebrow">ROI</p>
-          <h2>Optimiste vs pessimiste</h2>
+          <h3>Scénarios</h3>
         </div>
+        <button
+          className="panel-action"
+          type="button"
+          onClick={() =>
+            onInspect({
+              eyebrow: "ROI",
+              title: "Optimiste vs pessimiste",
+              summary:
+                "Comparaison directe des hypothèses ROI disponibles dans l'export phase 1, sans extrapolation.",
+              items: scenarios.map((scenario) => ({
+                title: scenario.scenario,
+                value: formatCurrency(scenario.monthly_net_benefit),
+                text: `Point mort : ${formatMonths(
+                  scenario.break_even_months,
+                )} · Uplift : ${formatPercent(scenario.uplift)}`,
+              })),
+            })
+          }
+        >
+          Détails
+        </button>
       </div>
 
       <div className="scenario-list">
@@ -31,36 +52,32 @@ function RoiScenarios({ scenarios = [] }) {
           const isPositive = net >= 0;
 
           return (
-            <article className="scenario-card" key={scenario.scenario}>
+            <button
+              className={`scenario-card ${isPositive ? "positive" : "negative"}`}
+              key={scenario.scenario}
+              type="button"
+              onClick={() =>
+                onInspect({
+                  eyebrow: "Scénario ROI",
+                  title: scenario.scenario,
+                  summary: `Bénéfice net mensuel : ${formatCurrency(net)}.`,
+                  metrics: [
+                    ["Point mort", formatMonths(scenario.break_even_months)],
+                    ["MAU", Number(scenario.monthly_active_users || 0).toLocaleString("fr-FR")],
+                    ["Uplift", formatPercent(scenario.uplift)],
+                  ],
+                })
+              }
+            >
               <div className="scenario-topline">
                 <strong>{scenario.scenario}</strong>
-                <span className={isPositive ? "signal-positive" : "signal-negative"}>
-                  {formatCurrency(net)}
-                </span>
+                <span>{formatCurrency(net)}</span>
               </div>
-
               <div className="roi-axis" aria-hidden="true">
-                <span
-                  className={isPositive ? "roi-positive" : "roi-negative"}
-                  style={{ width }}
-                />
+                <span style={{ width }} />
               </div>
-
-              <dl className="scenario-details">
-                <div>
-                  <dt>Point mort</dt>
-                  <dd>{formatMonths(scenario.break_even_months)}</dd>
-                </div>
-                <div>
-                  <dt>MAU</dt>
-                  <dd>{Number(scenario.monthly_active_users || 0).toLocaleString("fr-FR")}</dd>
-                </div>
-                <div>
-                  <dt>Uplift</dt>
-                  <dd>{formatPercent(scenario.uplift)}</dd>
-                </div>
-              </dl>
-            </article>
+              <small>Point mort · {formatMonths(scenario.break_even_months)}</small>
+            </button>
           );
         })}
       </div>

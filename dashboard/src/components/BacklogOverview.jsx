@@ -1,10 +1,10 @@
 import { EMPTY_DATA_MESSAGE, formatNumber } from "../data.js";
 
-function BacklogOverview({ backlog = [], summary = [] }) {
+function BacklogOverview({ backlog = [], summary = [], onInspect }) {
   if (!backlog.length) {
     return (
-      <section className="panel">
-        <h2>Backlog MVP</h2>
+      <section className="panel panel-backlog">
+        <h3>Backlog MVP</h3>
         <p className="empty-inline">{EMPTY_DATA_MESSAGE}</p>
       </section>
     );
@@ -13,23 +13,40 @@ function BacklogOverview({ backlog = [], summary = [] }) {
   const totalEffort = backlog.reduce((sum, item) => sum + (item.effort_days || 0), 0);
   const rows = summary.length ? summary : buildSummary(backlog);
   const maxEffort = Math.max(...rows.map((row) => row.effort_days || 0), 1);
+  const preview = backlog.slice(0, 6);
 
   return (
-    <section className="panel">
-      <div className="section-heading">
-        <div>
-          <p className="eyebrow">Backlog</p>
-          <h2>Périmètre MVP</h2>
-        </div>
-        <span className="metric-chip">{backlog.length} user stories</span>
+    <section className="panel panel-backlog">
+      <PanelHeader
+        eyebrow="Backlog"
+        title="Périmètre MVP"
+        action={`${backlog.length} US`}
+        onClick={() =>
+          onInspect({
+            eyebrow: "Backlog",
+            title: "17 user stories cadrées",
+            summary:
+              "Le backlog reste volontairement MVP : photo, analyse visuelle, recommandation, feedback, RGPD et pilotage.",
+            metrics: [
+              ["Total", `${backlog.length} stories`],
+              ["Effort", formatNumber(totalEffort, " JH")],
+              ["Priorités", rows.map((row) => row.moscow).join(" / ")],
+            ],
+            items: backlog.map((item) => ({
+              title: `${item.id} · ${item.moscow}`,
+              value: formatNumber(item.effort_days, " JH"),
+              text: item.description,
+            })),
+          })
+        }
+      />
+
+      <div className="backlog-score">
+        <strong>{formatNumber(totalEffort, " JH")}</strong>
+        <span>effort avant marge</span>
       </div>
 
-      <div className="summary-strip">
-        <span>{formatNumber(totalEffort, " JH")}</span>
-        <small>effort total avant marge</small>
-      </div>
-
-      <div className="bar-list">
+      <div className="bar-list compact">
         {rows.map((row) => (
           <div className="bar-row" key={row.moscow}>
             <div className="bar-row-label">
@@ -45,35 +62,79 @@ function BacklogOverview({ backlog = [], summary = [] }) {
         ))}
       </div>
 
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Priorité</th>
-              <th>Thème</th>
-              <th>User story</th>
-              <th>Effort</th>
-            </tr>
-          </thead>
-          <tbody>
-            {backlog.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>
-                  <span className={`priority-pill ${String(item.moscow).toLowerCase()}`}>
-                    {item.moscow || "n/a"}
-                  </span>
-                </td>
-                <td>{item.theme || EMPTY_DATA_MESSAGE}</td>
-                <td>{item.description || EMPTY_DATA_MESSAGE}</td>
-                <td>{formatNumber(item.effort_days, " JH")}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="story-stack" aria-label="Aperçu des user stories">
+        {preview.map((item) => (
+          <button
+            className="story-row"
+            key={item.id}
+            type="button"
+            onClick={() =>
+              onInspect({
+                eyebrow: item.id,
+                title: item.theme || "User story",
+                summary: item.description,
+                metrics: [
+                  ["Priorité", item.moscow || "n/a"],
+                  ["Effort", formatNumber(item.effort_days, " JH")],
+                  ["Sprint", item.sprint || "n/a"],
+                ],
+                items: [
+                  {
+                    title: "Valeur métier",
+                    text: item.business_value || EMPTY_DATA_MESSAGE,
+                  },
+                  {
+                    title: "Critères d'acceptation",
+                    text: item.acceptance_criteria || EMPTY_DATA_MESSAGE,
+                  },
+                ],
+              })
+            }
+          >
+            <span>{item.id}</span>
+            <strong>{item.theme}</strong>
+            <em>{formatNumber(item.effort_days, " JH")}</em>
+          </button>
+        ))}
+        {backlog.length > preview.length ? (
+          <button
+            className="story-row story-row-more"
+            type="button"
+            onClick={() =>
+              onInspect({
+                eyebrow: "Backlog complet",
+                title: `${backlog.length} user stories`,
+                summary:
+                  "Le détail complet est conservé dans l'export phase 1. Cette vue met en avant les premiers blocs du MVP pour rester lisible.",
+                items: backlog.slice(preview.length).map((item) => ({
+                  title: `${item.id} · ${item.moscow}`,
+                  value: formatNumber(item.effort_days, " JH"),
+                  text: item.description,
+                })),
+              })
+            }
+          >
+            <span>+</span>
+            <strong>{backlog.length - preview.length} user stories restantes</strong>
+            <em>ouvrir</em>
+          </button>
+        ) : null}
       </div>
     </section>
+  );
+}
+
+function PanelHeader({ eyebrow, title, action, onClick }) {
+  return (
+    <div className="panel-heading">
+      <div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h3>{title}</h3>
+      </div>
+      <button className="panel-action" type="button" onClick={onClick}>
+        {action}
+      </button>
+    </div>
   );
 }
 

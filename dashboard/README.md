@@ -39,6 +39,18 @@ Le dashboard affiche les KPI MVP, le backlog, les scénarios ROI, les risques, l
 npm run build
 ```
 
+## Déploiement GitHub Pages
+
+Le dashboard est prévu pour être publié sur GitHub Pages à l'adresse :
+
+```text
+https://vicod3x.github.io/insight-engine/
+```
+
+Le workflow GitHub Actions situé dans `.github/workflows/deploy-dashboard.yml` installe les dépendances, exécute `npm run build`, puis déploie `dashboard/dist`.
+
+La configuration `vite.config.js` utilise `/` en développement local et `/insight-engine/` au moment du build afin que les assets soient correctement chargés sur GitHub Pages.
+
 ## Limites
 
 Le dashboard reflète uniquement les données présentes dans l'export actuel. Si une donnée manque, l'interface affiche un état vide propre au lieu d'inventer une valeur.

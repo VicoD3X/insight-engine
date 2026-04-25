@@ -23,36 +23,66 @@ const FALLBACK_SPRINTS = [
   },
 ];
 
-function SprintTimeline({ sprints = [] }) {
+function SprintTimeline({ sprints = [], onInspect }) {
   const timeline = sprints.length ? sprints : FALLBACK_SPRINTS;
 
   if (!timeline.length) {
     return (
-      <section className="panel">
-        <h2>Timeline MVP</h2>
+      <section className="panel panel-sprints">
+        <h3>Timeline MVP</h3>
         <p className="empty-inline">{EMPTY_DATA_MESSAGE}</p>
       </section>
     );
   }
 
   return (
-    <section className="panel">
-      <div className="section-heading">
+    <section className="panel panel-sprints">
+      <div className="panel-heading">
         <div>
-          <p className="eyebrow">Planning</p>
-          <h2>Timeline 4 sprints</h2>
+          <p className="eyebrow">Timeline</p>
+          <h3>4 sprints</h3>
         </div>
+        <button
+          className="panel-action"
+          type="button"
+          onClick={() =>
+            onInspect({
+              eyebrow: "Planning MVP",
+              title: "Timeline 4 sprints",
+              summary:
+                "Une trajectoire volontairement courte pour cadrer, tester et piloter le MVP sans transformer le projet en produit production-ready.",
+              items: timeline.map((sprint) => ({
+                title: `Sprint ${sprint.sprint}`,
+                value: sprint.title,
+                text: sprint.summary,
+              })),
+            })
+          }
+        >
+          Voir
+        </button>
       </div>
 
-      <ol className="timeline">
+      <div className="timeline-rail" aria-label="Timeline des sprints">
         {timeline.map((sprint) => (
-          <li key={sprint.sprint}>
-            <span>Sprint {sprint.sprint}</span>
-            <strong>{sprint.title || EMPTY_DATA_MESSAGE}</strong>
-            <p>{sprint.summary || EMPTY_DATA_MESSAGE}</p>
-          </li>
+          <button
+            key={sprint.sprint}
+            type="button"
+            onClick={() =>
+              onInspect({
+                eyebrow: `Sprint ${sprint.sprint}`,
+                title: sprint.title || EMPTY_DATA_MESSAGE,
+                summary: sprint.summary || EMPTY_DATA_MESSAGE,
+                metrics: [["Durée", `${sprint.duration_weeks || 2} semaines`]],
+              })
+            }
+          >
+            <span>{sprint.sprint}</span>
+            <strong>{sprint.title}</strong>
+            <small>{sprint.duration_weeks || 2} sem.</small>
+          </button>
         ))}
-      </ol>
+      </div>
     </section>
   );
 }
