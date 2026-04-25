@@ -37,6 +37,8 @@ insight-engine/
 |-- data/
 |   |-- processed/
 |   `-- README.md
+|-- dashboard/
+|   `-- application React locale
 |-- docs/
 |   |-- project-brief.md
 |   |-- backlog-summary.md
@@ -107,11 +109,34 @@ pytest
 
 Les tests vérifient les calculs financiers, la criticité des risques, la structure du backlog et le schéma minimal du JSON dashboard.
 
+## Dashboard local
+
+Le dossier `dashboard/` contient une interface React locale alimentée par le fichier statique `data/processed/dashboard_data.json`.
+
+Il n'y a pas de backend : le dashboard lit une copie synchronisée du JSON dans `dashboard/public/dashboard_data.json`.
+
+Synchroniser les données depuis la racine du dépôt :
+
+```bash
+python scripts/sync_dashboard_data.py
+```
+
+Lancer l'interface :
+
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+
+Le dashboard affiche les KPI MVP, le backlog, les scénarios ROI, les risques, la synthèse RGPD et la timeline des sprints.
+
+La phase 3 n'est pas encore démarrée : les tests avancés et validations supplémentaires seront traités ensuite.
+
 ## Limites actuelles
 
-Ce dépôt ne contient pas encore :
+Ce dépôt ne contient pas :
 
-- de dashboard React ;
 - d'API ou backend ;
 - de modèle IA de recommandation ;
 - de pipeline de production ;

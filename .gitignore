@@ -41,3 +41,7 @@ reports/generated/
 *.log
 .cache/
 .pytest_cache/
+
+# Frontend
+dashboard/node_modules/
+dashboard/dist/
