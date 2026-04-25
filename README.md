@@ -1,5 +1,14 @@
 # Insight Engine — Fashion-Insta MVP Analytics
 
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-data%20pipeline-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=0b1628)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-dashboard-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![GitHub Pages](https://github.com/VicoD3X/insight-engine/actions/workflows/deploy-dashboard.yml/badge.svg)](https://vicod3x.github.io/insight-engine/)
+[![Status](https://img.shields.io/badge/Status-MVP%20portfolio-83C9FF)](https://vicod3x.github.io/insight-engine/)
+
+![Dashboard Insight Engine](docs/dashboard-preview.png)
+
 Insight Engine transforme un cadrage produit IA en base analytique exploitable : données structurées, indicateurs de pilotage, synthèses décisionnelles et dashboard React local.
 
 Le projet part du concept Fashion-Insta, une application mobile de recommandation d'articles de mode à partir d'une photo. Le dépôt ne livre pas l'application mobile finale et ne prétend pas embarquer une IA de recommandation en production. Il se concentre sur l'analyse, le pilotage MVP, le ROI, les risques et le RGPD.
