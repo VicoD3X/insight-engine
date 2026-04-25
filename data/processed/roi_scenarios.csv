@@ -1,0 +1,3 @@
+scenario,monthly_active_users,orders_per_user_month,uplift,average_order_value,gross_margin,monthly_net_benefit,break_even_months
+optimiste,50000.0,0.12,0.1,70.0,0.45,13690.0,5.177867056245435
+pessimiste,20000.0,0.08,0.015,60.0,0.4,-4634.0,n/a

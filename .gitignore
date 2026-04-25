@@ -29,7 +29,6 @@ _secrets/
 # Local data and generated artifacts
 data/raw/
 data/interim/
-data/processed/
 data/external/
 outputs/
 models/

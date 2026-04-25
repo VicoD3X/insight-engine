@@ -1,23 +1,124 @@
-# Insight Engine
+# Insight Engine — Fashion-Insta MVP Analytics
 
-Ce dépôt est en cours de préparation.
+Insight Engine transforme les documents de cadrage du MVP Fashion-Insta en une base data exploitable.
 
-Il part d'un ancien projet local contenant des supports de cadrage, un backlog et une présentation. La prochaine étape sera de structurer le projet avec du code Python et un notebook, sans perdre les documents utiles déjà présents.
+Le projet part d'un livrable métier existant : une application mobile de recommandation d'articles de mode à partir d'une photo. Cette phase ne construit pas l'application mobile, ne crée pas de modèle IA et ne livre pas encore de dashboard. Elle structure les informations clés du cadrage produit pour préparer une analyse claire, testable et réutilisable.
 
-## État actuel
+## Contexte
 
-- Les supports historiques sont rangés dans `docs/`.
-- Le dossier `src/` est réservé au futur code Python réutilisable.
-- Le dossier `notebooks/` est réservé aux notebooks d'exploration et de démonstration.
-- Le dossier `data/` documente la gestion des données locales.
-- Le dossier `tests/` est prêt pour les tests légers qui accompagneront le rework.
+Fashion-Insta est un MVP de parcours photo → recommandations → fiche produit. Les documents source décrivent le backlog, les hypothèses de budget, les scénarios ROI, les risques et les éléments RGPD.
 
-## Gestion des secrets
+Dans ce dépôt, ces fichiers Office ne sont pas de simples annexes : ils sont la source métier du projet.
 
-Les clés SSH, fichiers `.pem`, fichiers `.env` et autres secrets locaux ne doivent jamais être versionnés.
+## Objectif de la phase 1
 
-La clé SSH locale détectée au départ a été sortie du dossier projet et placée hors dépôt, dans un dossier local dédié aux secrets.
+Cette phase convertit les documents existants en datasets propres :
 
-## Prochaine étape
+- extraction Python des informations clés ;
+- génération de CSV et d'un JSON exploitable par un futur dashboard ;
+- notebook analytique lisible ;
+- synthèses Markdown pour comprendre le projet sans ouvrir Excel ou PowerPoint ;
+- tests simples sur les calculs principaux.
 
-Définir le positionnement du projet et la première direction technique avant d'ajouter le notebook et le code Python.
+## Sources métier
+
+```text
+docs/insight-engine-backlog.xlsx
+docs/insight-engine-workbook.xlsx
+docs/insight-engine-presentation.pptx
+```
+
+Les fichiers Office originaux sont conservés. Les données propres générées sont placées dans `data/processed/`.
+
+## Structure du dépôt
+
+```text
+insight-engine/
+|-- data/
+|   |-- processed/
+|   `-- README.md
+|-- docs/
+|   |-- project-brief.md
+|   |-- backlog-summary.md
+|   |-- financial-assumptions.md
+|   |-- risk-register.md
+|   |-- rgpd-summary.md
+|   `-- extraction-notes.md
+|-- notebooks/
+|   `-- 01_insight_engine_analysis.ipynb
+|-- scripts/
+|   `-- build_processed_data.py
+|-- src/
+|   `-- insight_engine/
+|-- tests/
+|-- requirements.txt
+`-- requirements-dev.txt
+```
+
+## Installation
+
+Créer un environnement Python puis installer les dépendances :
+
+```bash
+python -m venv .venv
+pip install -r requirements.txt -r requirements-dev.txt
+```
+
+## Générer les données traitées
+
+Depuis la racine du dépôt :
+
+```bash
+python scripts/build_processed_data.py
+```
+
+Cette commande génère :
+
+- `data/processed/backlog.csv`
+- `data/processed/financial_summary.csv`
+- `data/processed/roi_scenarios.csv`
+- `data/processed/risks.csv`
+- `data/processed/rgpd_summary.csv`
+- `data/processed/dashboard_data.json`
+
+Le fichier `dashboard_data.json` servira de source au dashboard React local prévu en phase 2.
+
+## Notebook analytique
+
+Lancer JupyterLab :
+
+```bash
+jupyter lab
+```
+
+Puis ouvrir :
+
+```text
+notebooks/01_insight_engine_analysis.ipynb
+```
+
+Le notebook charge les documents source, affiche les feuilles Excel détectées, reconstruit les tables propres et exporte les fichiers traités.
+
+## Tests
+
+```bash
+pytest
+```
+
+Les tests vérifient les calculs financiers, la criticité des risques, la structure du backlog et le schéma minimal du JSON dashboard.
+
+## Limites actuelles
+
+Ce dépôt ne contient pas encore :
+
+- de dashboard React ;
+- d'API ou backend ;
+- de modèle IA de recommandation ;
+- de pipeline de production ;
+- de données brutes utilisateur.
+
+Le bon positionnement est celui d'un MVP analytique : transformer un cadrage produit en base data propre pour aider à décider, prioriser et préparer la phase dashboard.
+
+## Prochaine phase
+
+La phase suivante consistera à créer un dashboard React local alimenté uniquement par `data/processed/dashboard_data.json`.

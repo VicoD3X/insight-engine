@@ -1,0 +1,327 @@
+{
+  "kpis": {
+    "investment_initial": 70885.0,
+    "mvp_effort_days": 115.0,
+    "buffer_rate": 0.15,
+    "effort_with_buffer_days": 132.25,
+    "recurring_monthly_cost": 5210.0,
+    "cloud_monthly_cost": 710.0,
+    "maintenance_monthly_cost": 4500.0,
+    "break_even_optimistic_months": 5.177867056245435
+  },
+  "backlog": [
+    {
+      "id": "US-01",
+      "theme": "Photo & garde-robe",
+      "description": "Ajouter une photo de tenue. Concrètement : prendre en photo (ou importer) une tenue et l’ajouter à ma garde-robe.",
+      "business_value": "Objectif : obtenir des recommandations basées sur mes vêtements réels.",
+      "moscow": "MUST",
+      "effort_days": 5,
+      "data_used": "Photo tenue; id utilisateur; horodatage",
+      "acceptance_criteria": "La photo apparaît dans la garde‑robe. On conserve une version utile pour l’app (ex. compressée et/ou visage flouté si l’option est activée). L’original est supprimé rapidement.",
+      "sprint": "Sprint 1",
+      "comment": ""
+    },
+    {
+      "id": "US-02",
+      "theme": "Photo & qualité",
+      "description": "Contrôle qualité photo (flou/lumière). Concrètement : être informé si ma photo est trop floue ou trop sombre.",
+      "business_value": "Objectif : envoyer une photo exploitable par l’IA et améliorer les résultats.",
+      "moscow": "MUST",
+      "effort_days": 5,
+      "data_used": "Photo tenue; score de qualité image",
+      "acceptance_criteria": "Si score < seuil : message “reprendre la photo”; sinon : analyse lancée.",
+      "sprint": "Sprint 1",
+      "comment": ""
+    },
+    {
+      "id": "US-03",
+      "theme": "RGPD & sécurité",
+      "description": "Masquer le visage avant stockage (option RGPD). Concrètement : pouvoir activer le masquage automatique du visage sur mes photos.",
+      "business_value": "Objectif : limiter les données personnelles visibles et me rassurer.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Photo; détection visage; paramètre utilisateur (opt-in)",
+      "acceptance_criteria": "Si option activée : le visage est flouté; l’original n’est pas conservé.",
+      "sprint": "Sprint 1",
+      "comment": ""
+    },
+    {
+      "id": "US-04",
+      "theme": "Analyse visuelle",
+      "description": "Identifier la catégorie du vêtement. Concrètement : que l’IA reconnaisse la catégorie principale (haut/bas/chaussures/accessoire).",
+      "business_value": "Objectif : retrouver mes pièces et filtrer les recommandations.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Photo; modèle pré-entraîné; taxonomie catégories",
+      "acceptance_criteria": "La catégorie est affichée et modifiable manuellement en cas d’erreur.",
+      "sprint": "Sprint 2",
+      "comment": ""
+    },
+    {
+      "id": "US-05",
+      "theme": "Analyse visuelle",
+      "description": "Extraire la couleur dominante. Concrètement : que l’IA détecte la couleur dominante du vêtement.",
+      "business_value": "Objectif : affiner les recommandations et gagner du temps.",
+      "moscow": "MUST",
+      "effort_days": 3,
+      "data_used": "Photo; extraction couleurs; mapping vers palette",
+      "acceptance_criteria": "La couleur dominante est proposée; l’utilisateur peut la corriger.",
+      "sprint": "Sprint 2",
+      "comment": ""
+    },
+    {
+      "id": "US-06",
+      "theme": "Signature visuelle",
+      "description": "Générer une signature visuelle (embedding). Concrètement : calculer un vecteur d’empreinte visuelle à partir de la photo.",
+      "business_value": "Objectif : comparer la photo au catalogue et trouver des articles similaires.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Photo; modèle pré-entraîné; stockage embeddings",
+      "acceptance_criteria": "Un embedding est produit et stocké; traitement < X secondes (objectif).",
+      "sprint": "Sprint 2",
+      "comment": ""
+    },
+    {
+      "id": "US-07",
+      "theme": "Recommandation",
+      "description": "Recommander 5 articles similaires du catalogue. Concrètement : recevoir une liste de 5 articles proches de ma photo.",
+      "business_value": "Objectif : découvrir des produits au même style et acheter plus facilement.",
+      "moscow": "MUST",
+      "effort_days": 13,
+      "data_used": "Embeddings photo; embeddings catalogue; moteur de similarité",
+      "acceptance_criteria": "Affichage Top 5; si aucun résultat : message + fallback (best sellers).",
+      "sprint": "Sprint 3",
+      "comment": ""
+    },
+    {
+      "id": "US-08",
+      "theme": "Expérience d'achat",
+      "description": "Afficher les recommandations (fiche produit). Concrètement : voir pour chaque recommandation la photo, le prix et un lien vers la fiche produit.",
+      "business_value": "Objectif : décider rapidement et passer à l’achat via le site e-commerce.",
+      "moscow": "MUST",
+      "effort_days": 5,
+      "data_used": "Catalogue produits; images produits; URL fiche",
+      "acceptance_criteria": "Chaque item a image+prix+CTA; ouverture du lien produit fonctionnelle.",
+      "sprint": "Sprint 3",
+      "comment": ""
+    },
+    {
+      "id": "US-09",
+      "theme": "Expérience d'achat",
+      "description": "Filtres simples sur recommandations. Concrètement : filtrer les résultats par couleur, taille, prix.",
+      "business_value": "Objectif : adapter les propositions à mes contraintes.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Attributs catalogue (couleur/tailles/prix); filtres UI",
+      "acceptance_criteria": "Filtres appliqués instantanément; option “réinitialiser” disponible.",
+      "sprint": "Sprint 3",
+      "comment": ""
+    },
+    {
+      "id": "US-10",
+      "theme": "Feedback & amélioration",
+      "description": "Collecter un feedback (utile / pas utile). Concrètement : donner mon avis sur les recommandations (utile/pas utile).",
+      "business_value": "Objectif : aider l’application à mieux me comprendre.",
+      "moscow": "MUST",
+      "effort_days": 5,
+      "data_used": "Feedback; id utilisateur; id produit; horodatage",
+      "acceptance_criteria": "Boutons simple; feedback enregistré même en cas de reconnexion.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-11",
+      "theme": "Feedback & amélioration",
+      "description": "Ajuster le classement via règles simples. Concrètement : utiliser le feedback pour réordonner les résultats (bonus/malus par marque/catégorie).",
+      "business_value": "Objectif : améliorer la pertinence sans modèle complexe.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Feedback; préférences implicites; logique de scoring",
+      "acceptance_criteria": "Les items “utiles” sont favorisés; pas d’apprentissage automatique obligatoire.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-12",
+      "theme": "RGPD & consentement",
+      "description": "Consentement explicite avant analyse photo. Concrètement : donner mon consentement au traitement de ma photo pour la recommandation.",
+      "business_value": "Objectif : garder le contrôle de mes données.",
+      "moscow": "MUST",
+      "effort_days": 5,
+      "data_used": "Écran consentement; traçabilité consentement",
+      "acceptance_criteria": "Sans consentement : pas d’analyse; consentement modifiable à tout moment.",
+      "sprint": "Sprint 1",
+      "comment": ""
+    },
+    {
+      "id": "US-13",
+      "theme": "RGPD & suppression",
+      "description": "Suppression des photos et données dérivées. Concrètement : supprimer une photo et les données associées (embedding, logs liés).",
+      "business_value": "Objectif : exercer mes droits RGPD facilement.",
+      "moscow": "MUST",
+      "effort_days": 8,
+      "data_used": "Photo; embeddings; table de purge; audit minimal",
+      "acceptance_criteria": "Suppression confirmée; délai de purge clairement annoncé; pas de résidus visibles.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-14",
+      "theme": "Préférences",
+      "description": "Définir styles et marques préférés. Concrètement : sélectionner mes styles et marques préférés.",
+      "business_value": "Objectif : obtenir des recommandations adaptées même sans photo.",
+      "moscow": "SHOULD",
+      "effort_days": 5,
+      "data_used": "Liste styles; liste marques; profil utilisateur",
+      "acceptance_criteria": "Au moins 3 styles proposés; marques du catalogue; modifiable à tout moment.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-15",
+      "theme": "Préférences",
+      "description": "Recommandation basée sur préférences. Concrètement : recevoir des recommandations à partir de mes styles/marques.",
+      "business_value": "Objectif : découvrir des articles qui me correspondent.",
+      "moscow": "SHOULD",
+      "effort_days": 8,
+      "data_used": "Préférences; règles de filtrage; catalogue",
+      "acceptance_criteria": "Résultats cohérents; fallback sur tendances si peu de données.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-16",
+      "theme": "Modération",
+      "description": "Détection contenu inapproprié. Concrètement : bloquer l’analyse si la photo contient du contenu manifestement inapproprié.",
+      "business_value": "Objectif : protéger les utilisateurs et le service.",
+      "moscow": "SHOULD",
+      "effort_days": 5,
+      "data_used": "Photo; score de modération",
+      "acceptance_criteria": "Si contenu détecté : message + refus; aucun stockage de la photo.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    },
+    {
+      "id": "US-17",
+      "theme": "Pilotage & métriques",
+      "description": "Tableau de bord simple des métriques. Concrètement : suivre les métriques clés (taux d’erreur, latence, CTR sur reco).",
+      "business_value": "Objectif : piloter l’amélioration du service.",
+      "moscow": "SHOULD",
+      "effort_days": 8,
+      "data_used": "Logs; métriques; dashboard",
+      "acceptance_criteria": "Vue hebdo; alertes basiques sur erreurs/latence.",
+      "sprint": "Sprint 4",
+      "comment": ""
+    }
+  ],
+  "backlog_summary": [
+    {
+      "moscow": "MUST",
+      "user_stories": 13,
+      "effort_days": 89
+    },
+    {
+      "moscow": "SHOULD",
+      "user_stories": 4,
+      "effort_days": 26
+    }
+  ],
+  "roi_scenarios": [
+    {
+      "scenario": "optimiste",
+      "monthly_active_users": 50000.0,
+      "orders_per_user_month": 0.12,
+      "uplift": 0.1,
+      "average_order_value": 70.0,
+      "gross_margin": 0.45,
+      "monthly_net_benefit": 13690.0,
+      "break_even_months": 5.177867056245435
+    },
+    {
+      "scenario": "pessimiste",
+      "monthly_active_users": 20000.0,
+      "orders_per_user_month": 0.08,
+      "uplift": 0.015,
+      "average_order_value": 60.0,
+      "gross_margin": 0.4,
+      "monthly_net_benefit": -4634.0,
+      "break_even_months": "n/a"
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Retard sur le MVP (8 semaines)",
+      "probability": 2,
+      "impact": 3,
+      "criticality": 6,
+      "mitigation": "MoSCoW strict + lots petits + démo chaque sprint.",
+      "owner": "PO/SM",
+      "follow_up": "Burndown + revue de sprint."
+    },
+    {
+      "risk": "Fuite de photos / données",
+      "probability": 2,
+      "impact": 3,
+      "criticality": 6,
+      "mitigation": "Chiffrement + accès restreint + suppression rapide de l’original.",
+      "owner": "Tech lead",
+      "follow_up": "Logs d’accès + tests sécurité."
+    },
+    {
+      "risk": "Non‑conformité (consentement / suppression)",
+      "probability": 2,
+      "impact": 3,
+      "criticality": 6,
+      "mitigation": "Consentement clair + bouton suppression + preuve consentement.",
+      "owner": "PO + juridique",
+      "follow_up": "Recette RGPD + audits simples."
+    },
+    {
+      "risk": "Adoption faible (peu d’usage de la photo)",
+      "probability": 2,
+      "impact": 3,
+      "criticality": 6,
+      "mitigation": "Onboarding + guidance photo + suivi KPI + itérations UX.",
+      "owner": "PO",
+      "follow_up": "MAU + taux d’usage + feedback."
+    }
+  ],
+  "rgpd": [
+    {
+      "finality": "On décrit un seul traitement : recommander des articles à partir d’une photo de tenue.",
+      "legal_basis": "On demande un consentement explicite avant l’analyse. Sans consentement, rien n’est analysé.",
+      "processor": "Microsoft Azure (hébergement + traitements techniques)",
+      "retention": "Photo originale : supprimée rapidement (ex. < 24h). Photo en garde‑robe : version traitée (compressée et/ou floutée) conservée jusqu’à suppression par l’utilisateur. Signature de style : 12 mois. Logs : 3 mois.",
+      "security_measures": "Chiffrement, contrôle d’accès, journalisation des accès, et environnements séparés (test / prod).",
+      "user_rights": "L’utilisateur peut supprimer ses photos et ses données, et retirer son consentement.",
+      "processed_data": "Photo de tenue (peut contenir un visage), identifiant utilisateur, date/heure, et feedback (utile/pas utile)."
+    }
+  ],
+  "sprints": [
+    {
+      "sprint": 1,
+      "title": "Photo + qualité + consentement",
+      "duration_weeks": 2,
+      "summary": "Prise/import, contrôle flou/lumière, option floutage visage et base technique."
+    },
+    {
+      "sprint": 2,
+      "title": "Analyse + signature",
+      "duration_weeks": 2,
+      "summary": "Catégorie, couleurs dominantes, génération et stockage des signatures produits."
+    },
+    {
+      "sprint": 3,
+      "title": "Recommandation + affichage",
+      "duration_weeks": 2,
+      "summary": "Top-N résultats, filtres, fiche produit et fallback si l'IA est indisponible."
+    },
+    {
+      "sprint": 4,
+      "title": "Finalisation MVP + pilotage",
+      "duration_weeks": 2,
+      "summary": "Feedback, préférences, modération, KPI, logs, tests finaux et préparation lancement."
+    }
+  ]
+}

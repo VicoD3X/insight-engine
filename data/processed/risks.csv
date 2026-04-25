@@ -1,0 +1,5 @@
+risk,probability,impact,criticality,mitigation,owner,follow_up
+Retard sur le MVP (8 semaines),2,3,6,MoSCoW strict + lots petits + démo chaque sprint.,PO/SM,Burndown + revue de sprint.
+Fuite de photos / données,2,3,6,Chiffrement + accès restreint + suppression rapide de l’original.,Tech lead,Logs d’accès + tests sécurité.
+Non‑conformité (consentement / suppression),2,3,6,Consentement clair + bouton suppression + preuve consentement.,PO + juridique,Recette RGPD + audits simples.
+Adoption faible (peu d’usage de la photo),2,3,6,Onboarding + guidance photo + suivi KPI + itérations UX.,PO,MAU + taux d’usage + feedback.

@@ -1,0 +1,9 @@
+metric,value,unit,description
+investment_initial,70885.0,EUR,Budget one-shot de construction du MVP.
+mvp_effort_days,115.0,JH,Effort MVP avant marge.
+buffer_rate,0.15,ratio,Marge d'aléas appliquée au backlog.
+effort_with_buffer_days,132.25,JH,Effort MVP avec buffer.
+recurring_monthly_cost,5210.0,EUR/month,Cloud + exploitation + maintenance.
+cloud_monthly_cost,710.0,EUR/month,"Stockage, appels IA, API et logs."
+maintenance_monthly_cost,4500.0,EUR/month,Petite maintenance mensuelle.
+break_even_optimistic_months,5.177867056245435,months,Point mort du scénario optimiste.

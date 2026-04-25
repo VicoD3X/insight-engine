@@ -15,4 +15,4 @@ data/
 `-- README.md
 ```
 
-Seul ce fichier de documentation est destiné à être suivi par Git à ce stade.
+Le dossier `processed/` contient les exports propres générés depuis les documents source. Ces fichiers sont versionnés car ils servent de base au notebook et au futur dashboard React local.
